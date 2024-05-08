@@ -6,11 +6,9 @@ export default class Card {
     //TODO
     this.title = title;
     this.color = color;
-  
+    // create a new card element
     this.element = document.createElement('article');
     this.element.classList.add('card');
-    //console.log("title and color in constructor");
-
     this.element.innerHTML = `<h3 class="title">${this.title}</h3><p class="description">${NO_DESCRIPTION_TEXT}</p><textarea class="editDescription hidden"></textarea><div class="buttons"><button class="edit"><img src="icons/edit.svg" alt="Edit"></button><button class="startMove"><img src="icons/move.svg" alt="Move"></button><button class="delete"><img src="icons/delete.svg" alt="Delete"></button></div>`;
     this.element.style.backgroundColor = this.color;
     // delete card 
@@ -19,27 +17,37 @@ export default class Card {
     // edit card
     const editCard = this.element.querySelector('.edit');
     editCard.addEventListener('click', this.handleEditCard.bind(this));
+    // move card
+    this.moveCard = this.element.querySelector('.startMove');
+    this.moveCard.addEventListener('click', this.handleMoveCard.bind(this));
   }
 
   addToCol(colElem, mover) {
     //TODO
     colElem.appendChild(this.element);
+    // passed in card object from App
+    this.move = mover;
   }
 
   setDescription(text) {
     //TODO
     let descriptionElem = this.element.querySelector('.description');
-    //console.log(this.descriptionElem);
     descriptionElem.textContent = text || NO_DESCRIPTION_TEXT;
-    //console.log(descriptionElem.textContent);
   }
 
-  handleDeleteCard(event) {
+  handleMoveCard() {
+    // call to start card move
+    this.move.startMoving(this.element);
+  }
+
+  handleDeleteCard() {
     // remove the card from the board
     this.element.remove();
+    // cancel a move when a card is moving
+    this.move.stopMoving();
   }
 
-  handleEditCard(event) {
+  handleEditCard() {
     let editDesc = this.element.querySelector(".editDescription");
     let desc = this.element.querySelector('.description');
     let descText = desc.textContent;

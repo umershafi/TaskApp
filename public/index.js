@@ -8,6 +8,7 @@ const main = () => {
   app.addCard("todo", "Write App class", "khaki");
   app.addCard("todo", "second", "khaki");
   app.addCard("todo", "third", "khaki");
+  app.addCard("done", "testtttt", "khaki");
   let card = app.addCard("todo", "Test everything!", "pink");
   card.setDescription("Hopefully we've been testing throughout the process...");
 };

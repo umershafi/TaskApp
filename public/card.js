@@ -6,11 +6,14 @@ export default class Card {
     //TODO
     this.title = title;
     this.color = color;
+    
     // create a new card element
     this.element = document.createElement('article');
     this.element.classList.add('card');
     this.element.innerHTML = `<h3 class="title">${this.title}</h3><p class="description">${NO_DESCRIPTION_TEXT}</p><textarea class="editDescription hidden"></textarea><div class="buttons"><button class="edit"><img src="icons/edit.svg" alt="Edit"></button><button class="startMove"><img src="icons/move.svg" alt="Move"></button><button class="delete"><img src="icons/delete.svg" alt="Delete"></button></div>`;
     this.element.style.backgroundColor = this.color;
+    // font color
+    this.changeColor(this.color);
     // delete card 
     const deleteCard = this.element.querySelector('.delete');
     deleteCard.addEventListener('click', this.handleDeleteCard.bind(this));
@@ -20,6 +23,51 @@ export default class Card {
     // move card
     this.moveCard = this.element.querySelector('.startMove');
     this.moveCard.addEventListener('click', this.handleMoveCard.bind(this));
+  }
+
+  changeColor(bgColor) {
+    let hexColor = bgColor;
+    // Check if the color is a named color
+    if (!/^#[0-9A-F]{6}$/i.test(bgColor)) {
+      // Convert named colors to hexadecimal values
+      const tempElem = document.createElement('div');
+      tempElem.style.color = bgColor;
+      document.body.appendChild(tempElem);
+      hexColor = window.getComputedStyle(tempElem).color;
+      document.body.removeChild(tempElem);
+
+      // Extract the RGB values from the string
+      const rgbValues = hexColor.match(/\d+/g).map(Number);
+
+      // Convert the RGB values to hexadecimal
+      const hexValues = rgbValues.map(value => {
+        const hex = value.toString(16); // Convert each RGB value to hexadecimal
+        return hex.length === 1 ? '0' + hex : hex; // Ensure each hexadecimal value has two digits
+      });
+
+      // Combine the hexadecimal values to form the color code
+      hexColor = '#' + hexValues.join('');
+    }
+
+    const r = parseInt(hexColor.slice(1, 3), 16);
+    const g = parseInt(hexColor.slice(3, 5), 16);
+    const b = parseInt(hexColor.slice(5, 7), 16);
+
+    const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+    const buttons = this.element.querySelectorAll('.buttons img');
+
+    if (luminance < 128) {
+      this.element.classList.add('dark');
+      // change buttons to white
+      buttons.forEach(button => {
+        button.style.filter = 'invert(1)';
+      });
+    }
+    else {
+      this.element.classList.add('light');
+    }
+
   }
 
   addToCol(colElem, mover) {

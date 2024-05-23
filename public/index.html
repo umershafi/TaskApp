@@ -2,23 +2,27 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Task Board | Assignment 2</title>
 
     <!-- This line provides automatic page and style reloading when files change -->
     <script type="module" src="/lib/client/updater.js"></script>
 
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles2.css">
     <script type="module" src="index.js"></script>
   </head>
-  <body>
+  <body class="light-mode">
     <header>
       <h1>Task Board</h1>
-
-      <form id="addCard">
-        <input type="text" name="title" id="cardTitle" placeholder="Title" required>
-        <input type="color" name="color" id="cardColor" placeholder="Color">
-        <button type="submit" id="addButton">Add</button>
-      </form>
+      <section class="headerBar">
+        <form id="addCard">
+          <input type="text" name="title" id="cardTitle" placeholder="Title" required>
+          <input type="color" name="color" id="cardColor" placeholder="Color">
+          <button type="submit" id="addButton">Add</button>
+        </form>
+        <button id="mode" class="dark-mode"><img src="icons/moon.svg" alt="dark mode"></button>
+      </section>
     </header>
 
     <main id="board">

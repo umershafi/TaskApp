@@ -14,10 +14,7 @@ export default class App {
     const form = document.getElementById('addCard');
     form.addEventListener('submit', this.handleAddCard.bind(this));
 
-    //this.mode = document.querySelector('#mode');
     this.mode.addEventListener('click', this.handleMode.bind(this));
-
-
   }
 
   initializeMode() {

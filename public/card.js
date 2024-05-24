@@ -2,10 +2,25 @@
 const NO_DESCRIPTION_TEXT = "(No description)";
 
 export default class Card {
+  static idCounter = 0;
   constructor(title, color) {
     //TODO
+    this.idNum = Card.idCounter++;
     this.title = title;
     this.color = color;
+    this.column = null;
+
+    // Load card data from local storage if available
+    const cardData = localStorage.getItem(`card_${this.idNum}`);
+    if (cardData) {
+      const parsedData = JSON.parse(cardData);
+      this.title = parsedData.title;
+      this.color = parsedData.color;
+      this.column = parsedData.column;
+      this.descriptionElem;
+    }
+
+    this.saveToLocalStorage();
     
     // create a new card element
     this.element = document.createElement('article');
@@ -24,6 +39,18 @@ export default class Card {
     this.moveCard = this.element.querySelector('.startMove');
     this.moveCard.addEventListener('click', this.handleMoveCard.bind(this));
   }
+
+  saveToLocalStorage() {
+    const cardData = {
+      idNum: this.idNum,
+      title: this.title,
+      color: this.color,
+      column: this.column,
+      description: NO_DESCRIPTION_TEXT
+    };
+    localStorage.setItem(`card_${this.idNum}`, JSON.stringify(cardData));
+  }
+
 
   changeColor(bgColor) {
     let hexColor = bgColor;
@@ -72,15 +99,16 @@ export default class Card {
 
   addToCol(colElem, mover) {
     //TODO
-    colElem.appendChild(this.element);
+    this.col = colElem;
+    this.col.appendChild(this.element);
     // passed in card object from App
     this.move = mover;
   }
 
   setDescription(text) {
     //TODO
-    let descriptionElem = this.element.querySelector('.description');
-    descriptionElem.textContent = text || NO_DESCRIPTION_TEXT;
+    this.descriptionElem = this.element.querySelector('.description');
+    this.descriptionElem.textContent = text || NO_DESCRIPTION_TEXT;
   }
 
   handleMoveCard() {
